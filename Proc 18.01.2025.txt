@@ -1,0 +1,32 @@
+USE [CDNXL_EMITER_TEST]
+GO
+/****** Object:  StoredProcedure [Yosi].[DodanieOdsetek]    Script Date: 19.03.2025 13:13:19 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Michal Smolen>
+-- Create date: <Create Date,,19.03.2025>
+-- Description:	<Description,,Wykorzystywana w XL rysuj pod wykresem>
+-- =============================================
+ALTER PROCEDURE [Yosi].[DodanieOdsetek] 
+	@Knt_id INT
+
+AS
+
+
+BEGIN
+	SET NOCOUNT ON;
+	INSERT INTO cdn.Odsetki
+		VALUES (32,	
+			481281,	
+			@Knt_id,		
+			YOSI.MaxGIDLP(@Knt_id),	--ZWRACA MAXA
+			81891,	
+			0.00,	
+			1111227917,	
+			3,	
+			2809)
+END
+

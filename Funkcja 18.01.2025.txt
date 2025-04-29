@@ -1,0 +1,22 @@
+USE [CDNXL_EMITER_TEST]
+GO
+/****** Object:  UserDefinedFunction [Yosi].[MaxGIDLP]    Script Date: 19.03.2025 13:17:49 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+--Zwraca max lp do importu
+ALTER FUNCTION [Yosi].[MaxGIDLP] (@KNT_ID INT)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @MaxODS_GIDLP INT;
+
+    SELECT @MaxODS_GIDLP = MAX(ODS_GIDLP)
+    FROM cdn.Odsetki
+    WHERE ODS_GIDNumer = @KNT_ID;
+	IF @MaxODS_GIDLP IS NULL 
+		SET @MaxODS_GIDLP = 1
+    RETURN @MaxODS_GIDLP+1;
+END;

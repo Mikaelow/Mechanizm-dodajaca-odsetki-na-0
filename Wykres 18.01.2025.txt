@@ -1,0 +1,28 @@
+@PAR ?@HS50|ZazGUID|&|azGUID:REG= @? PAR@
+
+
+DECLARE @Knt_id INT;
+SET NOCOUNT ON;
+DECLARE ZmianaOdsetek CURSOR FOR
+	SELECT  TrP_KntNumer FROM CDN.TraPlat 
+	INNER JOIN CDN.WkrZaznaczenia2 ON TrP_GIDTyp=WKZ2_GIDTyp AND TrP_GIDNumer=WKZ2_GIDNumer
+	WHERE WkZ2_GUID=??ZazGUID
+
+OPEN ZmianaOdsetek;
+FETCH NEXT FROM ZmianaOdsetek INTO @Knt_id;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+	IF EXISTS(SELECT 1 FROM CDN.Odsetki WHERE ODS_GIDNumer = @Knt_id AND ODS_GIDTyp = 32 AND ODS_SlwTypOdsetek=2809 AND ODS_ProcOds = 0.00)
+		BEGIN
+			FETCH NEXT FROM ZmianaOdsetek INTO @Knt_id
+			CONTINUE
+		END
+	ELSE
+		EXEC Yosi.DodanieOdsetek @Knt_id
+	SELECT 1 as id,'Wykonano' as Status
+END
+
+CLOSE ZmianaOdsetek;
+DEALLOCATE ZmianaOdsetek;
+SET NOCOUNT OFF;
+SELECT 1 as id,'Wykonano' as Status
